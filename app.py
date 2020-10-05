@@ -7,8 +7,8 @@ from lips_detect import *
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.jpeg' ,'.gif']
-app.config['UPLOAD_PATH'] = './static/uploads'
-app.config['LIPS_FOLDER'] = './static/LipsImage/'
+app.config['UPLOAD_PATH'] = './staticfiles/uploads'
+app.config['LIPS_FOLDER'] = './staticfiles/LipsImage/'
 app.config['JSONIFY_PRETTYPRINT_REGULAR']= False
 
 def remove_file(mydir):
@@ -16,8 +16,8 @@ def remove_file(mydir):
     print(filelist)
     for f in filelist:
         os.remove(os.path.join(mydir, f))
-remove_file('./static/uploads')
-remove_file('./static/LipsImage')
+remove_file('./staticfiles/uploads')
+remove_file('./staticfiles/LipsImage')
 
 def set_imagepath(mydir):
     root =  os.getcwd()
@@ -55,11 +55,11 @@ def upload_files():
         if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
                 file_ext != validate_image(uploaded_file.stream):
             abort(400)
-        remove_file('./static/uploads')
+        remove_file('./staticfiles/uploads')
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-        image_path = set_imagepath('./static/uploads')
+        image_path = set_imagepath('./staticfiles/uploads')
         print(image_path);
-        remove_file('./static/LipsImage')
+        remove_file('./staticfiles/LipsImage')
         save_image(image_path, hex_value)
         print(hex_value, filename)
 
@@ -76,7 +76,7 @@ def upload(filename):
 
 @app.route('/lips')
 def lips():
-    mydir = './static/LipsImage'
+    mydir = './staticfiles/LipsImage'
     filelist = [ f for f in os.listdir(mydir)]
     img_name = filelist[0]
     print(img_name)
